@@ -2,7 +2,17 @@ variable "bucket_name" {}
 
 resource "aws_s3_bucket" "bucket" {
   bucket = var.bucket_name
-  acl    = "public-read"
+}
+
+resource "aws_s3_bucket_public_access_block" "access_block" {
+  bucket = aws_s3_bucket.bucket.id
+
+  block_public_acls   = false
+  block_public_policy = false
+}
+
+resource "aws_s3_bucket_website_configuration" "bucket_website" {
+  bucket = aws_s3_bucket.bucket.id
 
   website {
     index_document = "index.html"
