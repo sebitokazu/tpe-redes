@@ -21,4 +21,13 @@ locals {
     systemctl enable httpd.service
     echo "Hello from $(hostname -f), welcome to TPE Redes - Grupo 3 website" > /var/www/html/index.html
   EOF
+
+  tags = {
+    author     = "Grupo 3 - 1C2023"
+    version    = 1
+    university = "ITBA"
+    subject    = "Redes"
+    created-by = "terraform"
+    exercise   = "elb-app"
+  }
 }
