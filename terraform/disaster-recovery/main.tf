@@ -19,12 +19,22 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
-data "aws_subnet_ids" "all" {
-  vpc_id = data.aws_vpc.vpc.id  # Replace with your VPC ID
+data "aws_subnets" "filtered_public" {
+  for_each = toset(data.aws_availability_zones.available.zone_ids)
+
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.vpc.id]
+  }
+
+  filter {
+    name   = "availability-zone-id"
+    values = ["${each.value}"]
+  }
 }
 
 locals {
-  subnet_ids = data.aws_subnet_ids.all.ids
+  subnet_ids = [for k, v in data.aws_subnets.filtered_public : v.ids[0]]
 }
 
 # Create a Launch Configuration
