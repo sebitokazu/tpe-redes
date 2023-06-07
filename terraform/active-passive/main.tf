@@ -53,7 +53,7 @@ resource "aws_subnet" "passive_subnet" {
 
 # Create Passive EC2 Instance
 resource "aws_instance" "passive_instance" {
-  ami           = "ami-12345678"  # Replace with your desired AMI
+  ami           = "ami-0715c1897453cabd1"  # Replace with your desired AMI
   instance_type = "t2.micro"      # Replace with your desired instance type
   subnet_id     = aws_subnet.passive_subnet.id
   provider      = aws.passive
@@ -104,9 +104,9 @@ resource "aws_route53_record" "active_to_passive_failover" {
   set_identifier  = "primary"
   failover_routing_policy {
     type             = "PRIMARY"
-    status           = "ENABLED"
-    ttl              = 60
-    record_set_id    = aws_route53_record.active_to_passive_failover.id
+    # status           = "ENABLED"
+    # ttl              = 60
+    # record_set_id    = aws_route53_record.active_to_passive_failover.id
   }
 }
 
@@ -123,9 +123,9 @@ resource "aws_route53_record" "passive_to_active_failover" {
   set_identifier  = "secondary"
   failover_routing_policy {
     type             = "SECONDARY"
-    status           = "ENABLED"
-    ttl              = 60
-    record_set_id    = aws_route53_record.passive_to_active_failover.id
+    # status           = "ENABLED"
+    # ttl              = 60
+    # record_set_id    = aws_route53_record.passive_to_active_failover.id
   }
 }
 
