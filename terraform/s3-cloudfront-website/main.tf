@@ -1,7 +1,8 @@
 provider "aws" {
   region = "us-east-1"
 
-  shared_credentials_files = ["~/.aws/credentials"]
+  access_key = "AKIAYFYJBOI7IRFRI4HW"
+  secret_key = "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"
   profile                  = "default"
 
     default_tags {
@@ -17,7 +18,7 @@ provider "aws" {
 
 module "s3" {
   source = "./modules/s3"
-  bucket_name = "infocracks-demo"
+  bucket_name = "infocracks-demo-vsr2"
 }
 
 module "cloudfront" {
