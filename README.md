@@ -1,7 +1,7 @@
 # TPE Redes - IaaC
 TPE Redes de Informacion - ITBA 1C2023
 
-## Grupo 8
+## Grupo 3
 
 ### Integrantes
 - Galende, Lautaro
