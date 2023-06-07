@@ -7,12 +7,17 @@ module "vpc" {
   name = "${local.name_preffix}-elb-vpc"
 
   azs = local.azs
-  # private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
-  # usamos public para no tener que mandar un nat gateway para que se conecte a internet, si tenemos tiempo lo mejoramos
-  public_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
+
+  private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
+  public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 4)]
 
   create_igw = true
 
   enable_dns_hostnames = true
   enable_dns_support   = true
+
+  enable_nat_gateway = true
+  single_nat_gateway = false
+
+  tags = local.tags
 }

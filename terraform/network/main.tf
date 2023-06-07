@@ -6,7 +6,7 @@ module "vpc" {
 
   name = "${local.name_preffix}-vpc"
 
-  cidr                  = local.vpc_cidr
+  cidr = local.vpc_cidr
 
   azs             = local.azs
   private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
@@ -25,4 +25,6 @@ module "vpc" {
 
   enable_nat_gateway = true
   single_nat_gateway = false
+
+  tags = local.tags
 }

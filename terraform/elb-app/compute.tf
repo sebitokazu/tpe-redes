@@ -8,6 +8,8 @@ module "web_server_sg" {
   ingress_rules       = ["ssh-tcp", "http-80-tcp"]
   ingress_cidr_blocks = ["0.0.0.0/0"]
   egress_rules        = ["all-all"]
+
+  tags = local.tags
 }
 
 module "ec2_instances" {
@@ -19,11 +21,13 @@ module "ec2_instances" {
   name                        = "${local.name_preffix}-website"
   ami                         = data.aws_ami.amazon_linux.id
   instance_type               = "t2.micro"
-  subnet_ids                  = [for k,v in module.vpc.public_subnets : v]
+  subnet_ids                  = [for k,v in module.vpc.private_subnets : v]
   vpc_security_group_ids      = [module.web_server_sg.security_group_id]
   associate_public_ip_address = true
 
   user_data_base64 = base64encode(local.user_data)
+
+  tags = local.tags
 
   depends_on = [module.vpc]
 }

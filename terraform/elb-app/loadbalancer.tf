@@ -8,17 +8,10 @@ module "loadbalancer_sg" {
   # Ingress Rules & CIDR Block  
   ingress_rules       = ["http-80-tcp"]
   ingress_cidr_blocks = ["0.0.0.0/0"]
-  ingress_with_cidr_blocks = [
-    {
-      from_port   = 81
-      to_port     = 81
-      protocol    = 6
-      description = "Allow Port 81 from internet"
-      cidr_blocks = "0.0.0.0/0"
-    },
-  ]
   # Egress Rule - all-all open
   egress_rules = ["all-all"]
+
+  tags = local.tags
 }
 
 module "elb" {
@@ -31,12 +24,6 @@ module "elb" {
       instance_port     = 80
       instance_protocol = "HTTP"
       lb_port           = 80
-      lb_protocol       = "HTTP"
-    },
-    {
-      instance_port     = 80
-      instance_protocol = "HTTP"
-      lb_port           = 81
       lb_protocol       = "HTTP"
     },
   ]
@@ -54,6 +41,8 @@ module "elb" {
   # ELB attachments
   number_of_instances = 3
   instances = [for k, v in  module.ec2_instances.id : v]
+
+  tags = local.tags
 
   depends_on = [module.ec2_instances]
 }
