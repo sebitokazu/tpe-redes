@@ -2,6 +2,10 @@ provider "aws" {
   region = "us-east-1"
 }
 
+data "aws_vpc" "vpc" {
+  default = true
+}
+
 resource "aws_instance" "example" {
   availability_zone = "us-east-1a"  # Specify the initial availability zone (AZ)
 
@@ -13,6 +17,14 @@ resource "aws_instance" "example" {
 
 data "aws_availability_zones" "available" {
   state = "available"
+}
+
+data "aws_subnet_ids" "all" {
+  vpc_id = data.aws_vpc.vpc.id  # Replace with your VPC ID
+}
+
+locals {
+  subnet_ids = data.aws_subnet_ids.all.ids
 }
 
 # Create a Launch Configuration
@@ -27,6 +39,7 @@ resource "aws_launch_configuration" "example" {
 
   lifecycle {
     create_before_destroy = true
+    # ignore_changes = [ subnets ]
   }
 }
 
@@ -37,7 +50,7 @@ resource "aws_autoscaling_group" "example" {
   max_size             = 1
   desired_capacity     = 1
   launch_configuration = aws_launch_configuration.example.name
-  vpc_zone_identifier  = ["subnet-08b7b245602241a1b", "subnet-0a6c57a78ee697bd7", "subnet-04904f8559c375910"]
+  vpc_zone_identifier  = local.subnet_ids
 
   # Specify other Auto Scaling Group attributes like health checks, etc.
   health_check_type    = "EC2"
