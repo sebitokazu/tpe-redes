@@ -17,7 +17,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   comment             = "S3 bucket distribution"
   default_root_object = "index.html"
 
-  aliases = [var.bucket_id]
+  aliases = ["redesdemoiaac.com.ar", var.bucket_id]
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
@@ -47,7 +47,8 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = var.certificate_arn
-    ssl_support_method  = "sni-only"
+    cloudfront_default_certificate = true
+    # acm_certificate_arn = var.certificate_arn
+    # ssl_support_method  = "sni-only"
   }
 }

@@ -17,7 +17,7 @@ provider "aws" {
 
 module "s3" {
   source = "./modules/s3"
-  bucket_name = "your_website_domain.com"
+  bucket_name = "infocracks-demo"
 }
 
 module "cloudfront" {
